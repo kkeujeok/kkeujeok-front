@@ -21,11 +21,11 @@
   },
   "rules": {
     "linebreak-style": 0,
-    "import/no-anonymouse-default-export": "off",
+    "import/no-anonymous-default-export": "off",
     "import/no-extraneous-dependencies": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "import/order": [
-      "error",
+      "off",
       {
         "groups": ["builtin", "external", "internal", "parent", "sibling"],
         "newlines-between": "always",
@@ -50,12 +50,15 @@
     "react/jsx-props-no-spreading": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": [
-      "warn",
+      "off",
       {
         "extensions": [".js", ".jsx"]
       }
     ],
     "react/prop-types": 0,
-    "react/function-component-definition": 0
+    "react/function-component-definition": 0,
+
+    "arrow-parens": "off",
+    "object-curly-newline": "off"
   }
 }
