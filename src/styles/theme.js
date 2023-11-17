@@ -1,9 +1,10 @@
 export const defaultTheme = {
   colors: {
-    primary: '#bedbb8',
-    green: '#d6e8e3',
-    yellow: '#fff7e2',
-    pink: '#f2b9cf',
-    black: '#424242',
+    primary: '#724DBC',
+    yellow: '#F4B538',
+    ibory: '#FFFBE5',
+    purple: '#945E92',
+    black: '#2E2E2E',
+    placeholder: '#898989',
   },
 };
