@@ -4,7 +4,7 @@ import '../App.css';
 const GlobalStyle = createGlobalStyle`
     *{
         body{
-            margin : 0;
+            margin : 0 auto;
             background-color: pink;
         }
         font-family: 'locus_sangsang';
@@ -12,6 +12,8 @@ const GlobalStyle = createGlobalStyle`
             text-decoration: none;
         }
     }
+
+    
 `;
 
 export default GlobalStyle;
