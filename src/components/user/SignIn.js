@@ -1,15 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const BtnUser = styled(Link)`
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  color: #2e2e2e;
-  margin-left: ${props => (props.pw ? '5px' : 0)};
-`;
-
 const SignIn = () => (
   <SignInWrapper>
     <Title>끄적끄적</Title>
@@ -113,6 +104,15 @@ const InputLine = styled.hr`
 const BtnBox = styled.div`
   display: flex;
   margin-top: 30px;
+`;
+
+const BtnUser = styled(Link)`
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #2e2e2e;
+  margin-left: ${props => (props.pw ? '5px' : 0)};
 `;
 
 const LoginBtn = styled.button`
