@@ -1,29 +1,29 @@
 import styled from 'styled-components';
 import SignIn from './user/SignIn';
-import { ReactComponent as CoverImg } from '../imgs/cover.svg';
-import GroundImg from '../imgs/ground.png';
+import Cover from './Cover';
+import { ReactComponent as EmailImg } from '../imgs/Email.svg';
+
+const Main = () => (
+  <MainWrapper>
+    <Cover />
+    <SignIn />
+    <EmailIcon />
+  </MainWrapper>
+);
 
 const MainWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 100vh;
 `;
-const CoverBox = styled.div`
-  width: 50%;
-  height: 100%;
+
+const EmailIcon = styled(EmailImg)`
+  position: absolute;
+  width: 210px;
+  height: auto;
+  z-index: 150;
+  bottom: 30px;
+  right: 40%;
 `;
-
-const SignInCover = styled(SignIn)``;
-
-const Main = () => (
-  <MainWrapper>
-    <CoverBox>
-      <p>dd</p>
-      {/* <MainCover /> */}
-      {/* <Ground /> */}
-    </CoverBox>
-    <SignInCover />
-  </MainWrapper>
-);
 
 export default Main;
