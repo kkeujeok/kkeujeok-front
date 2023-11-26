@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
     *{
         body{
             margin : 0 auto;
-            background-color: pink;
+            background-color: #ffff;
         }
         font-family: 'locus_sangsang';
         a {
