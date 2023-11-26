@@ -63,7 +63,16 @@ const LuckyBox = styled.div`
   top: 420px;
 `;
 
-const LuckIcon = styled(Lucky)``;
+const LuckIcon = styled(Lucky)`
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  -webkit-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
+  &:hover {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+  }
+`;
 
 const LuckScore = styled.p`
   color: #fff;
@@ -101,6 +110,16 @@ const BackStar = styled(Star)`
   position: absolute;
   right: 350px;
   top: 100px;
+
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  -webkit-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
+
+  &:hover {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+  }
 `;
 
 export default Character;
