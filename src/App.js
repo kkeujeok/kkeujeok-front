@@ -8,6 +8,8 @@ import { defaultTheme } from './styles/theme';
 import SignUp from './pages/user/SignUp';
 import FindPw from './pages/user/FindPw';
 import Home from './pages/home/Home';
+import Friends from './pages/Friends';
+import Ranking from './pages/Ranking';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/findPw" element={<FindPw />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/friends" element={<Friends />} />
+          <Route path="/rank" element={<Ranking />} />
         </Routes>
       </ThemeProvider>
     </div>
