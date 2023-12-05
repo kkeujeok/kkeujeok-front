@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import { ReactComponent as Paper } from '../imgs/Paper.svg';
+import { Link } from 'react-router-dom';
 
 const Friends = () => (
   <Wrapper>
     <LeftBox>
+      <BackBtn to="/home">내 우주로 돌아가기</BackBtn>
       <PaperBox>
         <ContentBox>
           <Title>친구 검색 </Title>
@@ -177,6 +179,15 @@ const FriendBtn = styled.button`
   border: none;
   color: #fff;
   margin: 5px;
+`;
+
+// 뒤로가기
+const BackBtn = styled(Link)`
+  color: #fff;
+  z-index: 100;
+  position: absolute;
+  left: 36px;
+  top: 3%;
 `;
 
 export default Friends;

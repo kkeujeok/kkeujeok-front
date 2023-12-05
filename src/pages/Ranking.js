@@ -155,6 +155,7 @@ const MyRank = styled.p`
   margin-top: 30%;
 `;
 
+// 뒤로가기
 const BackBtn = styled(Link)`
   color: #fff;
   z-index: 100;
