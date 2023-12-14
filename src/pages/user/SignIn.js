@@ -20,7 +20,7 @@ const SignIn = () => (
         </InputStyleBox>
       </InputBox>
     </Form>
-    <LoginBtn>로그인</LoginBtn>
+    <LoginBtn to="/home">로그인</LoginBtn>
     <BtnBox>
       <BtnUser to="/signUp" title="회원가입">
         회원가입 /
@@ -115,15 +115,16 @@ const BtnUser = styled(Link)`
   margin-left: ${props => (props.pw ? '5px' : 0)};
 `;
 
-const LoginBtn = styled.button`
+const LoginBtn = styled(Link)`
   width: 226px;
-  height: 50px;
+  height: 15px;
   border-radius: 10px;
   background: #724dbc;
   color: #fff;
   text-align: center;
   font-size: 18px;
   border: none;
+  padding: 20px;
 
   &:hover {
     background-color: #6e52a5;
