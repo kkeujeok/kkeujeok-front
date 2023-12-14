@@ -23,8 +23,8 @@ jobs:
           source-directory: 'output'
           destination-github-username: 'yuraup'
           destination-repository-name: 'kkeujeok-front'
-          user-email: ${{ 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 }}
-          commit-message: ${{ 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 }}
+          user-email: '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'
+          commit-message: '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'
           target-branch: main
       - name: Test get variable exported by push-to-another-repository
         run: echo $DESTINATION_CLONED_DIRECTORY
