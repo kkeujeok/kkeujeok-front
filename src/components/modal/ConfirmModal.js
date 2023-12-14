@@ -1,7 +1,6 @@
 import { useRef, Children, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as OutButton } from '../../imgs/outButton.svg';
 
 const ConfirmModal = ({ title, dialog, children, modalClose }) => {
   // 리스트 정보
@@ -95,24 +94,6 @@ const ModalWrapper = styled.div`
   @media screen and (max-width: 599px) and (min-width: 376px) {
     width: 90%;
     height: 30%;
-  }
-`;
-
-const CloseButton = styled(OutButton)`
-  display: flex;
-  margin-left: 480px;
-  margin-top: 30px;
-
-  /* 아이폰 SE UI  */
-  @media screen and (max-width: 375px) {
-    width: 8%;
-    margin-top: 6px;
-    margin-left: 80%;
-  }
-
-  @media screen and (max-width: 599px) and (min-width: 376px) {
-    margin-left: 78%;
-    margin-top: 8px;
   }
 `;
 
