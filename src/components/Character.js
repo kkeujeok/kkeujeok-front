@@ -6,11 +6,21 @@ import { ReactComponent as Lucky } from '../imgs/Lucky.svg';
 import { ReactComponent as Space } from '../imgs/SpaceBackground.svg';
 import { ReactComponent as Girl } from '../imgs/Girl.svg';
 import { ReactComponent as Star } from '../imgs/StarY.svg';
+import Modal from './modal/ConfirmModal';
 
 const Character = () => {
   // 드롭다운 메뉴바
   const [dropdown, setDropdow] = useState(false);
+  const [isModalOpend, setIsModalOpend] = useState(false);
 
+  const modalView = () => {
+    setIsModalOpend(prevState => !prevState);
+    if (!isModalOpend) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  };
   return (
     <Wrapper>
       <MenuBtn
@@ -32,7 +42,14 @@ const Character = () => {
         </LuckyBox>
       </CharacterBox>
       <HomeTitle>유라의 2023</HomeTitle>
-      <DelAccount>계정삭제</DelAccount>
+      <DelAccount onClick={modalView}>계정삭제</DelAccount>
+      {isModalOpend && (
+        <Modal
+          modalClose={modalView}
+          title="계정 삭제 "
+          dialog="정말 삭제하시겠습니까? 한 번 삭제한 계정은 복구할 수 없습니다."
+        />
+      )}
     </Wrapper>
   );
 };

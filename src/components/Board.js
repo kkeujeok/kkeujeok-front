@@ -1,20 +1,38 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable no-console */
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RollingPaper from './RollingPaper';
 import { ReactComponent as Ground } from '../imgs/ground.svg';
 
-const Board = () => (
-  <Wrapper>
-    <PaperBox>
-      <RollingPaper />
-      <RollingPaper />
-      <RollingPaper />
-      <RollingPaper />
-      <RollingPaper />
-      <RollingPaper />
-      <GroundBox />
-    </PaperBox>
-  </Wrapper>
-);
+const Board = () => {
+  // const [isModalDialog, setIsModalDialog] = useState('');
+
+  const openModalHandler = () => {};
+  // const openAlert = async alertDialog => {
+  //   setIsModalOpend(true);
+  //   // setIsModalDialog(alertDialog);
+  // };
+  // useEffect(() => {
+  //   setIsModalOpend(!isModalOpend); // 모달 열고 닫고
+  //   console.log('모달도미 어쩌라고 ');
+  // });
+  return (
+    <Wrapper>
+      <PaperBox>
+        {/* 6개가 최대 */}
+        <RollingPaper />
+        <RollingPaper />
+        <RollingPaper />
+        <RollingPaper />
+        <RollingPaper />
+        <RollingPaper />
+        <GroundBox />
+      </PaperBox>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   width: 60%;

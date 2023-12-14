@@ -1,14 +1,32 @@
+/* eslint-disable no-console */
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Modal from './modal/DetailModal';
 
-const RollingPaper = () => (
-  <Wrapper>
-    <Pin />
-    <Paper>
-      <Message>ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇdddddㅇㅇㅇㅇㅇ</Message>
-      <Sender>보낸이 : 유라</Sender>
-    </Paper>
-  </Wrapper>
-);
+const RollingPaper = () => {
+  const [isModalOpend, setIsModalOpend] = useState(false);
+
+  const modalView = () => {
+    setIsModalOpend(prevState => !prevState);
+    if (!isModalOpend) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    console.log('모달 작동! ');
+  };
+
+  return (
+    <Wrapper onClick={modalView}>
+      <Pin />
+      <Paper>
+        <Message>ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇdddddㅇㅇㅇㅇㅇ</Message>
+        <Sender>보낸이 : 유라</Sender>
+      </Paper>
+      {isModalOpend && <Modal modalClose={modalView} />}
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,6 +34,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const Paper = styled.div`
   width: 170px;
   height: 180px;
@@ -39,6 +58,7 @@ const Pin = styled.div`
   margin-bottom: -15px;
   z-index: 102;
 `;
+
 const Message = styled.p`
   width: 140px;
   height: 40px;
