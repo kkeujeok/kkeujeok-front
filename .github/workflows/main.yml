@@ -23,7 +23,7 @@ jobs:
           source-directory: 'output'
           destination-github-username: yuraup
           destination-repository-name: kkeujeok-front
-          user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }} // 변경
+          user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
           target-branch: main
       - name: Test get variable exported by push-to-another-repository
