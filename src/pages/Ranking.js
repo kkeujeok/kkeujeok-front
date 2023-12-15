@@ -1,65 +1,50 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as EmailImg } from '../imgs/Email.svg';
 import { ReactComponent as Satellite } from '../imgs/Satellite.svg';
+import axios from 'axios';
 
-const Ranking = () => (
+const Ranking = () => {
+  const [rankingData, setRankingData] = useState([]);
+  const [myRank, setMyRank] = useState(0);
+  const userId = 1;
+
+  useEffect(() => {
+    axios.get(`/users/ranking`)
+      .then((response) => {setRankingData(response.data); console.log(response.data)})
+      .catch(error => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    axios.get(`/users/ranking/${userId}`)
+      .then((response) => {setMyRank(response.data); console.log(response.data)})
+      .catch(error => console.error(error));
+  }, []);
+
+  return(
   <Wrapper>
     <SatelliteIcon />
     <LeftBox>
       <BackBtn to="/home">내 우주로 돌아가기</BackBtn>
       <PaperBox>
         <ContentBox>
-          <Title> 행운 랭킹 TOP 10 </Title>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
+            <Title> 행운 랭킹 TOP 10 </Title>
+            {rankingData.map((user, index) => (
+                <List key={user.nickname}>
+                    <p>{user.nickname}</p>
+                    <p>{user.luck}점</p>
+                </List>
+            ))}
         </ContentBox>
       </PaperBox>
     </LeftBox>
     <RightBox>
-      <MyRank>나의 랭킹: ㅇㅇㅇ등 </MyRank>
+      <MyRank>나의 랭킹: {myRank}등 </MyRank>
       <EmailIcon />
     </RightBox>
   </Wrapper>
-);
+)};
 
 const Wrapper = styled.div`
   width: 100%;
