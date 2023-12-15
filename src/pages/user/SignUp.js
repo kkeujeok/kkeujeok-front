@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Cover from '../../components/Cover';
+import axios from 'axios';
 
 const SignUp = () => {
   const [checkedSexValues, setCheckedSexValues] = useState([]);
@@ -16,6 +17,7 @@ const SignUp = () => {
   //   // eslint-disable-next-line no-console
   //   console.log('dddd:', checkedSexValues);
   // }, [checkedSexValues]);
+
   return (
     <Wrapper>
       <Cover />

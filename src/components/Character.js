@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import styled from 'styled-components';
 import { useState } from 'react';
 import Dropdown from './DropDown';
@@ -7,11 +8,17 @@ import { ReactComponent as Space } from '../imgs/SpaceBackground.svg';
 import { ReactComponent as Girl } from '../imgs/Girl.svg';
 import { ReactComponent as Star } from '../imgs/StarY.svg';
 import Modal from './modal/ConfirmModal';
+import SendingModal from './modal/SendingModal';
 
 const Character = () => {
   // 드롭다운 메뉴바
   const [dropdown, setDropdow] = useState(false);
+
+  // 계정삭제 모달
   const [isModalOpend, setIsModalOpend] = useState(false);
+
+  // 보내는 모달
+  const [isModalSendingOpend, setIsModalSendingOpend] = useState(false);
 
   const modalView = () => {
     setIsModalOpend(prevState => !prevState);
@@ -21,6 +28,17 @@ const Character = () => {
       document.body.style.overflow = 'unset';
     }
   };
+
+  const modalSendingView = () => {
+    setIsModalSendingOpend(prevState => !prevState);
+    if (!isModalSendingOpend) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    console.log('모달 작동! ');
+  };
+
   return (
     <Wrapper>
       <MenuBtn
@@ -42,12 +60,14 @@ const Character = () => {
         </LuckyBox>
       </CharacterBox>
       <HomeTitle>유라의 2023</HomeTitle>
+      <LetterSendingBtn onClick={modalSendingView}>친구에게 편지보내기</LetterSendingBtn>
+      {isModalSendingOpend && <SendingModal modalClose={modalSendingView} />}
       <DelAccount onClick={modalView}>계정삭제</DelAccount>
       {isModalOpend && (
         <Modal
           modalClose={modalView}
           title="계정 삭제 "
-          dialog="정말 삭제하시겠습니까? 한 번 삭제한 계정은 복구할 수 없습니다."
+          dialog="정말 삭제하시겠습니까?  한 번 삭제한 계정은 복구할 수 없습니다."
         />
       )}
     </Wrapper>
@@ -91,7 +111,7 @@ const PlanetSeatIcon = styled(PlanetSeat)`
 const LuckyBox = styled.div`
   position: absolute;
   right: 100px;
-  top: 420px;
+  top: 350px;
 `;
 
 const LuckIcon = styled(Lucky)`
@@ -120,6 +140,22 @@ const HomeTitle = styled.p`
   margin: 50px auto 0 auto;
 `;
 
+const LetterSendingBtn = styled.button`
+  width: 170px;
+  height: 60px;
+  background-color: rgba(114, 77, 188, 1);
+  text-align: center;
+  padding: 20px;
+  color: #ffff;
+  border-radius: 10px;
+  margin: 50px auto 0 auto;
+  border: none;
+  z-index: 500;
+  &:hover {
+    background-color: rgba(114, 100, 188, 1);
+  }
+`;
+
 const DelAccount = styled.p`
   margin: 70px 20px 0 0;
 `;
@@ -134,7 +170,7 @@ const CharacterIcon = styled(Girl)`
   width: 100px;
   height: 200px;
   right: 200px;
-  bottom: 340px;
+  bottom: 400px;
 `;
 
 const BackStar = styled(Star)`
