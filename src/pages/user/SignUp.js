@@ -135,9 +135,9 @@ const SignUp = () => {
     signup();
   };
 
-  useEffect(() => {
-    console.log(email, nickname, pw, gender);
-  });
+  // useEffect(() => {
+  //   console.log(email, nickname, pw, gender);
+  // });
 
   // 비밀번호 일치하는지
   useEffect(() => {
