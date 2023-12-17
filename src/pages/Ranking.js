@@ -8,16 +8,17 @@ import axios from 'axios';
 const Ranking = () => {
   const [rankingData, setRankingData] = useState([]);
   const [myRank, setMyRank] = useState(0);
-  const userId = 1;
+  const userId = 8;
+  const apiURL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    axios.get(`/users/ranking`)
+    axios.get(`${apiURL}/users/ranking`)
       .then((response) => {setRankingData(response.data); console.log(response.data)})
       .catch(error => console.error(error));
   }, []);
 
   useEffect(() => {
-    axios.get(`/users/ranking/${userId}`)
+    axios.get(`${apiURL}/users/ranking/${userId}`)
       .then((response) => {setMyRank(response.data); console.log(response.data)})
       .catch(error => console.error(error));
   }, []);

@@ -13,10 +13,11 @@ const Character = () => {
     const [luckScore, setLuckScore] = useState(-1);
     const [dropdown, setDropdown] = useState(false);
     const [isModalOpened, setIsModalOpened] = useState(false);
-    const userId = 1;
+    const userId = 8;
+    const apiURL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        axios.get(`/users/${userId}/luck`)
+        axios.get(`${apiURL}/users/${userId}/luck`)
             .then(response => {
                 console.log(response.data);
                 setLuckScore(response.data);
