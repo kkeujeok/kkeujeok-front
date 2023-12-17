@@ -6,6 +6,7 @@ const DropDown = () => {
     localStorage.removeItem('token');
     alert('로그아웃 되었습니다.');
   };
+
   return (
     <MenuWrapper>
       <Title to="/friends">친구 관리</Title>

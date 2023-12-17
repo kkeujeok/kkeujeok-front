@@ -2,7 +2,7 @@ import { useRef, Children, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const ConfirmModal = ({ title, dialog, children, modalClose }) => {
+const ConfirmModal = ({ title, dialog, children, modalClose, onYesHandler }) => {
   // 리스트 정보
 
   // 모달 백그라운드 구분
@@ -10,10 +10,13 @@ const ConfirmModal = ({ title, dialog, children, modalClose }) => {
   const navigate = useNavigate();
 
   const modalClickYes = () => {
-    // eslint-disable-next-line no-alert
-    alert('계정을 삭제했습니다.');
-    modalClose(false);
-    navigate('/');
+    if (onYesHandler) {
+      // eslint-disable-next-line no-alert
+      alert('계정을 삭제했습니다.');
+      modalClose(false);
+      navigate('/');
+      onYesHandler();
+    }
   };
 
   const modalClickNo = () => {
