@@ -1,13 +1,21 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const DropDown = () => (
-  <MenuWrapper>
-    <Title to="/friends">친구 관리</Title>
-    <Title to="/rank">랭킹</Title>
-    <Title to="/">로그아웃</Title>
-  </MenuWrapper>
-);
+const DropDown = () => {
+  const onLogOut = () => {
+    localStorage.removeItem('token');
+    alert('로그아웃 되었습니다.');
+  };
+  return (
+    <MenuWrapper>
+      <Title to="/friends">친구 관리</Title>
+      <Title to="/rank">랭킹</Title>
+      <Title to="/" onClick={onLogOut}>
+        로그아웃
+      </Title>
+    </MenuWrapper>
+  );
+};
 
 const MenuWrapper = styled.div`
   width: 200px;
