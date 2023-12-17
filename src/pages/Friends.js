@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { ReactComponent as Paper } from '../imgs/Paper.svg';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
 
 const Friends = () => {
@@ -9,12 +9,15 @@ const Friends = () => {
   const [searchWord, setSearchWord] = useState(""); // 검색어 상태 추가
 
   // 친구 목록
-  const [friendList, setFriendList] = ustState([]);
+  const [friendList, setFriendList] = useState([]);
+
+  const userId = 1;
+  const friendId = 2;
+
+  const apiURL = process.env.REACT_APP_API_URL;
 
   const search = () => {
-    const userId = 1;
-
-    axios.get(`/users/search/${searchWord}`)
+    axios.get(`${apiURL}/users/search/${searchWord}`)
       .then((response) => {
         setSearchData(response.data);
         console.log(response.data);
@@ -26,16 +29,40 @@ const Friends = () => {
     setSearchWord(event.target.value); // 입력 값으로 searchWord 상태 업데이트
   };
 
+  // // 친구 목록
+  // const findFriendList = () => {
+  //   axios.get(`/friends/${userId}`)
+  //     .then((response) => {
+  //       setFriendList(response.data.friends)
+  //       console.log(response.data.friends)
+  //     })
+  //     .catch(error => console.error(error));
+  // };
 
-  const findFriendList = () => {
-    axios.get(`/friends/${userId}`)
+  useEffect(() => {
+    axios.get(`${apiURL}/friends/${userId}`)
       .then((response) => {
-        setFriendList(response.data.Friends)
-        console.log(response.data.Friends)
+         setFriendList(response.data.friends);
+         console.log(response.data.friends)
+        })
+      .catch(error => console.error(error));
+  }, []);
+
+  // 친구 신청
+  const addFriend = () => {
+    axios.post(`${apiURL}/friends/${user-id}/${friend-id}`)
+      .then((response) => {
       })
       .catch(error => console.error(error));
+  };
 
-  }
+  // 친구 삭제
+  const deleteFriend = () => {
+    axios.delete(`${apiURL}/friends/${user-id}/${friend-id}`)
+      .then((response) => {
+      })
+      .catch(error => console.error(error));
+  };
 
   return (
   <Wrapper>
@@ -56,7 +83,7 @@ const Friends = () => {
             {searchData.map((user, index) => (
               <List key={user.email}>
                 <p>{user.nickname}</p>
-                <FriendBtn>친구 신청</FriendBtn>
+                <FriendBtn onClick={addFriend}>친구 신청</FriendBtn>
               </List>
             ))}
           </ResultBox>
@@ -68,15 +95,14 @@ const Friends = () => {
         <ContentBox right>
           <Title>친구 관리</Title>
             {friendList.map((user, index) => (
-              <List key={user.id}>
+              <List key={user.name}>
               <p>{user.name}</p>
               <BtnBox>
                 <FriendBtn>방문</FriendBtn>
-                <FriendBtn>삭제</FriendBtn>
+                <FriendBtn onClick={deleteFriend}>삭제</FriendBtn>
               </BtnBox>
               </List>
             ))}
-            
         </ContentBox>
       </PaperBox>
     </RightBox>
