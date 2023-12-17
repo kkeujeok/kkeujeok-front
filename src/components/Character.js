@@ -9,8 +9,16 @@ import { ReactComponent as Girl } from '../imgs/Girl.svg';
 import { ReactComponent as Star } from '../imgs/StarY.svg';
 import Modal from './modal/ConfirmModal';
 import SendingModal from './modal/SendingModal';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const Character = () => {
+  const apiURL = process.env.REACT_APP_API_URL;
+
+  // 사용자 ID 추출
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+
   // 드롭다운 메뉴바
   const [dropdown, setDropdow] = useState(false);
 
@@ -37,6 +45,23 @@ const Character = () => {
       document.body.style.overflow = 'unset';
     }
     console.log('모달 작동! ');
+  };
+
+  const deleteAccount = async () => {
+    try {
+      const { userId } = decodedToken;
+      console.log('유저아이디: ', userId);
+
+      // 계정 삭제 요청
+      await axios.delete(`${apiURL}/users/delete/${userId}`);
+
+      // 로컬 스토리지에서 토큰 제거
+      localStorage.removeItem('token');
+
+      // 부모 컴포넌트에 계정 삭제 이벤트 전달
+    } catch (error) {
+      console.error('계정 삭제 중 에러:', error);
+    }
   };
 
   return (
@@ -67,6 +92,7 @@ const Character = () => {
         <Modal
           modalClose={modalView}
           title="계정 삭제 "
+          onYesHandler={() => deleteAccount()}
           dialog="정말 삭제하시겠습니까?  한 번 삭제한 계정은 복구할 수 없습니다."
         />
       )}
