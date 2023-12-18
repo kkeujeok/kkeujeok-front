@@ -33,6 +33,7 @@ const SignIn = () => {
 
           // 로그인 성공 후 토큰 저장
           const token = res.data;
+          localStorage.setItem('email', email);
           localStorage.setItem('token', token);
           console.log('토큰 저장 성공', token);
           navigate('/home');

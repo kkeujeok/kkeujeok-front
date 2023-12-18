@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Dropdown from './DropDown';
 import { ReactComponent as PlanetSeat } from '../imgs/PlanetSeat.svg';
 import { ReactComponent as Lucky } from '../imgs/Lucky.svg';
@@ -28,6 +28,12 @@ const Character = () => {
   // 보내는 모달
   const [isModalSendingOpend, setIsModalSendingOpend] = useState(false);
 
+  // 마이홈 정보 보기
+  const [userNickName, setUserNickName] = useState('');
+  const [gender, setGender] = useState('');
+
+  const { userId } = decodedToken;
+
   const modalView = () => {
     setIsModalOpend(prevState => !prevState);
     if (!isModalOpend) {
@@ -49,7 +55,6 @@ const Character = () => {
 
   const deleteAccount = async () => {
     try {
-      const { userId } = decodedToken;
       console.log('유저아이디: ', userId);
 
       // 계정 삭제 요청
@@ -63,6 +68,26 @@ const Character = () => {
       console.error('계정 삭제 중 에러:', error);
     }
   };
+
+  useEffect(() => {
+    axios.get(`${apiURL}/users/myPage/${userId}`);
+    console
+      .log()
+      .then(response => {
+        setUserNickName(response.userNickName);
+        console.log(response.userNickName);
+
+        setGender(response.gender);
+        console.log(response.gender);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  // const userInfo = ()
+
+  // useEffect(() => {
+  //   findFriendList();
+  // }, [userId]);
 
   return (
     <Wrapper>
@@ -84,7 +109,7 @@ const Character = () => {
           <LuckScore>777점</LuckScore>
         </LuckyBox>
       </CharacterBox>
-      <HomeTitle>유라의 2023</HomeTitle>
+      <HomeTitle>의 2023</HomeTitle>
       <LetterSendingBtn onClick={modalSendingView}>친구에게 편지보내기</LetterSendingBtn>
       {isModalSendingOpend && <SendingModal modalClose={modalSendingView} />}
       <DelAccount onClick={modalView}>계정삭제</DelAccount>

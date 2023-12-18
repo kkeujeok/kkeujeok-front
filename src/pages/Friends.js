@@ -1,113 +1,139 @@
+/* eslint-disable no-console */
 import styled from 'styled-components';
 import { ReactComponent as Paper } from '../imgs/Paper.svg';
 import { Link } from 'react-router-dom';
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const Friends = () => {
   const [searchData, setSearchData] = useState([]);
-  const [searchWord, setSearchWord] = useState(""); // 검색어 상태 추가
-
+  const [searchWord, setSearchWord] = useState(''); // 검색어 상태 추가
   // 친구 목록
   const [friendList, setFriendList] = useState([]);
+  const [selectedFriend, setSelectedFriend] = useState(null); // 선택한 친구 상태 추가
 
-  const userId = 1;
+  // 사용자 ID 추출
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+
   const friendId = 2;
 
   const apiURL = process.env.REACT_APP_API_URL;
 
-  const search = () => {
-    axios.get(`${apiURL}/users/search/${searchWord}`)
-      .then((response) => {
-        setSearchData(response.data);
-        console.log(response.data);
-      })
-      .catch(error => console.error(error));
+  const { userId } = decodedToken;
+
+  const handleInputChange = event => {
+    setSearchWord(event.target.value);
+    // 입력 값으로 searchWord 상태 업데이트
   };
 
-  const handleInputChange = (event) => {
-    setSearchWord(event.target.value); // 입력 값으로 searchWord 상태 업데이트
+  // 검색 기능
+  const search = async () => {
+    try {
+      console.log(searchWord);
+      console.log('유저아이디: ', userId);
+
+      // 검색
+      const response = await axios.get(`${apiURL}/users/search/${searchWord}`);
+      setSearchData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('search error:', error);
+    }
   };
 
-  // // 친구 목록
-  // const findFriendList = () => {
-  //   axios.get(`/friends/${userId}`)
-  //     .then((response) => {
-  //       setFriendList(response.data.friends)
-  //       console.log(response.data.friends)
-  //     })
-  //     .catch(error => console.error(error));
-  // };
+  // 친구 리스트 조회
+  const findFriendList = async () => {
+    try {
+      console.log('유저아이디: ', userId);
+
+      const response = await axios.get(`${apiURL}/friends/${userId}`);
+      setFriendList(response.data.friends);
+      console.log(response.data.friends);
+    } catch (error) {
+      console.error('계정 삭제 중 에러:', error);
+    }
+  };
 
   useEffect(() => {
-    axios.get(`${apiURL}/friends/${userId}`)
-      .then((response) => {
-         setFriendList(response.data.friends);
-         console.log(response.data.friends)
-        })
-      .catch(error => console.error(error));
-  }, []);
+    findFriendList();
+  }, [userId]);
 
   // 친구 신청
-  const addFriend = () => {
-    axios.post(`${apiURL}/friends/${user-id}/${friend-id}`)
-      .then((response) => {
-      })
-      .catch(error => console.error(error));
+  const addFriend = async () => {
+    try {
+      console.log('유저아이디: ', userId);
+
+      const response = await axios.post(`${apiURL}/friends/${userId}/${friendId}`);
+      setFriendList(response.data.friends);
+      console.log(response.data.friends);
+      alert('친구 신청이 완료되었습니다');
+    } catch (error) {
+      console.error('친구 신청 에러:', error);
+    }
   };
 
   // 친구 삭제
-  const deleteFriend = () => {
-    axios.delete(`${apiURL}/friends/${user-id}/${friend-id}`)
-      .then((response) => {
-      })
-      .catch(error => console.error(error));
+  const deleteFriend = async () => {
+    try {
+      console.log('유저아이디: ', userId);
+
+      const response = await axios.delete(`${apiURL}/friends/${userId}/${friendId}`);
+      setFriendList(response.data.friends);
+      console.log(response.data.friends);
+      alert('친구가 삭제되었습니다');
+    } catch (error) {
+      console.error('친구 신청 에러:', error);
+    }
   };
 
   return (
-  <Wrapper>
-    <LeftBox>
-      <BackBtn to="/home">내 우주로 돌아가기</BackBtn>
-      <PaperBox>
-        <ContentBox>
-          <Title>친구 검색</Title>
-          <SearchBox>
-            <SearchInput 
-              placeholder="이메일을 검색하세요" 
-              value={searchWord} // input의 value를 searchWord 상태와 연결
-              onChange={handleInputChange} // 입력 시 handleInputChange 호출
-            />
-            <SearchBtn onClick={search}> 검색 </SearchBtn>
-          </SearchBox>
-          <ResultBox>
-            {searchData.map((user, index) => (
-              <List key={user.email}>
-                <p>{user.nickname}</p>
-                <FriendBtn onClick={addFriend}>친구 신청</FriendBtn>
-              </List>
-            ))}
-          </ResultBox>
-        </ContentBox>
-      </PaperBox>
-    </LeftBox>
-    <RightBox>
-      <PaperBox right>
-        <ContentBox right>
-          <Title>친구 관리</Title>
+    <Wrapper>
+      <LeftBox>
+        <BackBtn to="/home">내 우주로 돌아가기</BackBtn>
+        <PaperBox>
+          <ContentBox>
+            <Title>친구 검색</Title>
+            <SearchBox>
+              <SearchInput
+                placeholder="이메일을 검색하세요"
+                value={searchWord} // input의 value를 searchWord 상태와 연결
+                onChange={handleInputChange} // 입력 시 handleInputChange 호출
+              />
+              <SearchBtn onClick={search}> 검색 </SearchBtn>
+            </SearchBox>
+            <ResultBox>
+              {searchData.map((user, index) => (
+                <List key={user.email}>
+                  <p>{user.nickname}</p>
+                  <FriendBtn>친구 신청</FriendBtn>
+                  {/* // onClick={addFriend} */}
+                </List>
+              ))}
+            </ResultBox>
+          </ContentBox>
+        </PaperBox>
+      </LeftBox>
+      <RightBox>
+        <PaperBox right>
+          <ContentBox right>
+            <Title>친구 관리</Title>
             {friendList.map((user, index) => (
               <List key={user.name}>
-              <p>{user.name}</p>
-              <BtnBox>
-                <FriendBtn>방문</FriendBtn>
-                <FriendBtn onClick={deleteFriend}>삭제</FriendBtn>
-              </BtnBox>
+                <p>{user.name}</p>
+                <BtnBox>
+                  <FriendBtn>방문</FriendBtn>
+                  <FriendBtn onClick={deleteFriend}>삭제</FriendBtn>
+                </BtnBox>
               </List>
             ))}
-        </ContentBox>
-      </PaperBox>
-    </RightBox>
-  </Wrapper>
-)};
+          </ContentBox>
+        </PaperBox>
+      </RightBox>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   width: 100%;
