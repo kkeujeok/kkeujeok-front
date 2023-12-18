@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-console */
 import styled from 'styled-components';
 import { ReactComponent as Paper } from '../imgs/Paper.svg';
@@ -10,15 +11,14 @@ const Friends = () => {
   const navigator = useNavigate();
   const [searchData, setSearchData] = useState([]);
   const [searchWord, setSearchWord] = useState(''); // 검색어 상태 추가
+
   // 친구 목록
   const [friendList, setFriendList] = useState([]);
-  const [selectedFriend, setSelectedFriend] = useState(null); // 선택한 친구 상태 추가
+  const [selectedFriend, setSelectedFriend] = useState(''); // 선택한 친구 상태 추가
 
   // 사용자 ID 추출
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
-
-  const friendId = 2;
 
   const apiURL = process.env.REACT_APP_API_URL;
 
@@ -38,7 +38,7 @@ const Friends = () => {
       // 검색
       const response = await axios.get(`${apiURL}/users/search/${searchWord}`);
       setSearchData(response.data);
-      console.log(response.data);
+      console.log('검색결과', response.data);
     } catch (error) {
       console.error('search error:', error);
     }
@@ -62,25 +62,30 @@ const Friends = () => {
   }, [userId]);
 
   // 친구 신청
-  const addFriend = async () => {
+  const addFriend = async id => {
+    const friendId = id;
     try {
-      console.log('유저아이디: ', userId);
+      console.log('내 아이디 : ', userId);
+      console.log('친구 아이디 : ', friendId);
 
-      const response = await axios.post(`${apiURL}/friends/${userId}/${friendId}`);
-
-      alert('친구 신청이 완료되었습니다');
+      await axios.post(`${apiURL}/friends/${userId}/${friendId}`);
+      // setFriendList(response.data.friends);
+      // console.log('친구신청겨로가:', response);
+      alert('response.data.message');
     } catch (error) {
       console.error('친구 신청 에러:', error);
     }
   };
 
   // 친구 삭제
-  const deleteFriend = async () => {
+  const deleteFriend = async id => {
+    const friendId = id;
+
     try {
       console.log('유저아이디: ', userId);
 
       const response = await axios.delete(`${apiURL}/friends/${userId}/${friendId}`);
-
+      console.log('친구삭제', response);
       alert('친구가 삭제되었습니다');
     } catch (error) {
       console.error('친구 신청 에러:', error);
@@ -110,7 +115,7 @@ const Friends = () => {
               {searchData.map((user, index) => (
                 <List key={user.email}>
                   <p>{user.nickname}</p>
-                  <FriendBtn onClick={addFriend}>친구 신청</FriendBtn>
+                  <FriendBtn onClick={() => addFriend(user.id)}>친구 신청</FriendBtn>
                 </List>
               ))}
             </ResultBox>
@@ -126,7 +131,7 @@ const Friends = () => {
                 <p>{user.name}</p>
                 <BtnBox>
                   <FriendBtn onClick={() => visit(user.id)}>방문</FriendBtn>
-                  <FriendBtn onClick={deleteFriend}>삭제</FriendBtn>
+                  <FriendBtn onClick={() => deleteFriend(user.id)}>삭제</FriendBtn>
                 </BtnBox>
               </List>
             ))}
