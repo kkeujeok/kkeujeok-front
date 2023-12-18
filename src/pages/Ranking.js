@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-console */
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
@@ -55,7 +56,7 @@ const Ranking = () => {
         </PaperBox>
       </LeftBox>
       <RightBox>
-          <MyRank>나의 랭킹: {myRank}등 </MyRank>
+        <MyRank>나의 랭킹: {myRank}등 </MyRank>
         <EmailIcon />
       </RightBox>
     </Wrapper>

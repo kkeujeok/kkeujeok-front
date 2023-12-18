@@ -246,8 +246,8 @@ const SignUp = () => {
                   type="checkbox"
                   name="sex"
                   value="SECRECT"
-                  checked={checkedSexValues.includes('SECRECT')}
-                  onChange={() => checkSex('SECRECT')}
+                  checked={checkedSexValues.includes('SECRET')}
+                  onChange={() => checkSex('SECRET')}
                 />
                 비밀
               </CheckBoxLabel>

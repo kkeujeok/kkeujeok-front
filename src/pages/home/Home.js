@@ -8,22 +8,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Home = () => (
-  // useEffect(() => {
-  //   axios
-  //     .get(`${apiURL}/myPage/${userId}`)
-  //     .then(response => {
-  //       setUserNickName(response.userNickName);
-  //       console.log(response.userNickName);
-
-  //       setGender(response.gender);
-  //       console.log(response.gender);
-
-  //       setRollingPaperDtos(response.rollingPaperDtos);
-  //       console.log(response.rollingPaperDtos);
-  //     })
-  //     .catch(error => console.error(error));
-  // }, []);
-
   <HomeWrapper>
     <Board />
     <SatelliteIcon />

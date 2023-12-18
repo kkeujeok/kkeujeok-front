@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-console */
@@ -5,19 +6,35 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RollingPaper from './RollingPaper';
 import { ReactComponent as Ground } from '../imgs/ground.svg';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const Board = () => {
   // const [isModalDialog, setIsModalDialog] = useState('');
+  const apiURL = process.env.REACT_APP_API_URL;
+  // 사용자 ID 추출
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+  const { userId } = decodedToken;
+  const [rollingPaperDtos, setRollingPaperDtos] = useState([]);
 
   const openModalHandler = () => {};
-  // const openAlert = async alertDialog => {
-  //   setIsModalOpend(true);
-  //   // setIsModalDialog(alertDialog);
-  // };
-  // useEffect(() => {
-  //   setIsModalOpend(!isModalOpend); // 모달 열고 닫고
-  //   console.log('모달도미 어쩌라고 ');
-  // });
+  const userInfo = async () => {
+    try {
+      console.log('유저아이디: ', userId);
+
+      const response = await axios.get(`${apiURL}/users/myPage/${userId}`);
+      setRollingPaperDtos(response.data.rollingPaperDtos);
+      console.log('멜론:', response);
+    } catch (error) {
+      console.error('에러 :', error);
+    }
+  };
+
+  useEffect(() => {
+    userInfo();
+  }, [userId]);
+
   return (
     <Wrapper>
       <PaperBox>
@@ -30,6 +47,7 @@ const Board = () => {
         <RollingPaper />
         <GroundBox />
       </PaperBox>
+      <ConfirmRolling>받은 페이퍼 수: {rollingPaperDtos.length} 개</ConfirmRolling>
     </Wrapper>
   );
 };
@@ -71,4 +89,10 @@ const PaperBox = styled.div`
   flex-wrap: wrap;
 `;
 
+const ConfirmRolling = styled.p`
+  left: 50%;
+  position: absolute;
+  bottom: 0;
+  z-index: 400;
+`;
 export default Board;

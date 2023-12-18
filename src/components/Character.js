@@ -31,26 +31,25 @@ const Character = () => {
   // 보내는 모달
   const [isModalSendingOpend, setIsModalSendingOpend] = useState(false);
 
-  // 여기 주의 에러뜨면 주석
-  // useEffect(() => {
-  //   axios.get(`${apiURL}/users/${userId}/luck`).then(response => {
-  //     console.log(response.data);
-  //     setLuckScore(response.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    axios.get(`${apiURL}/users/${userId}/luck`).then(response => {
+      console.log(response.data);
+      setLuckScore(response.data);
+    });
+  }, []);
 
-  // const increaseLuck = () => {
-  //   const newScore = luckScore + 1;
-  //   axios
-  //     .post(`${apiURL}/users/${userId}/increaseLuck`, { userId })
-  //     .then(response => {
-  //       console.log('점수 업데이트 성공:', response.data);
-  //       setLuckScore(newScore);
-  //     })
-  //     .catch(error => {
-  //       console.error('점수 업데이트 실패:', error);
-  //     });
-  // };
+  const increaseLuck = () => {
+    const newScore = luckScore + 1;
+    axios
+      .post(`${apiURL}/users/${userId}/increaseLuck`, { userId })
+      .then(response => {
+        console.log('점수 업데이트 성공:', response.data);
+        setLuckScore(newScore);
+      })
+      .catch(error => {
+        console.error('점수 업데이트 실패:', error);
+      });
+  };
 
   // 마이홈 정보 보기
   const [userNickName, setUserNickName] = useState('');
@@ -107,9 +106,9 @@ const Character = () => {
 
   const userInfo = async () => {
     try {
-      console.log('유저아이디: ', userId.userId);
+      console.log('유저아이디: ', userId);
 
-      const response = await axios.get(`${apiURL}/users/myPage/${userId.userId}`);
+      const response = await axios.get(`${apiURL}/users/myPage/${userId}`);
       console.log('강승우', response);
       setUserNickName(response.data.userNickName);
       console.log(response.data.userNickName);
@@ -141,8 +140,7 @@ const Character = () => {
         <CharacterIcon />
         <PlanetSeatIcon />
         <LuckyBox>
-          <LuckIcon />
-          {/* onClick={increaseLuck}  */}
+          <LuckIcon onClick={increaseLuck} />
           <LuckScore>{luckScore}</LuckScore>
         </LuckyBox>
       </CharacterBox>
