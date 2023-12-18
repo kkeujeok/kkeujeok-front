@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-console */
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
@@ -31,25 +32,25 @@ const Character = () => {
   const [isModalSendingOpend, setIsModalSendingOpend] = useState(false);
 
   // 여기 주의 에러뜨면 주석
-  useEffect(() => {
-    axios.get(`${apiURL}/users/${userId}/luck`).then(response => {
-      console.log(response.data);
-      setLuckScore(response.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`${apiURL}/users/${userId}/luck`).then(response => {
+  //     console.log(response.data);
+  //     setLuckScore(response.data);
+  //   });
+  // }, []);
 
-  const increaseLuck = () => {
-    const newScore = luckScore + 1;
-    axios
-      .post(`${apiURL}/users/${userId}/increaseLuck`, { userId })
-      .then(response => {
-        console.log('점수 업데이트 성공:', response.data);
-        setLuckScore(newScore);
-      })
-      .catch(error => {
-        console.error('점수 업데이트 실패:', error);
-      });
-  };
+  // const increaseLuck = () => {
+  //   const newScore = luckScore + 1;
+  //   axios
+  //     .post(`${apiURL}/users/${userId}/increaseLuck`, { userId })
+  //     .then(response => {
+  //       console.log('점수 업데이트 성공:', response.data);
+  //       setLuckScore(newScore);
+  //     })
+  //     .catch(error => {
+  //       console.error('점수 업데이트 실패:', error);
+  //     });
+  // };
 
   // 마이홈 정보 보기
   const [userNickName, setUserNickName] = useState('');
@@ -104,11 +105,25 @@ const Character = () => {
   //     .catch(error => console.error(error));
   // }, []);
 
-  // const userInfo = ()
+  const userInfo = async () => {
+    try {
+      console.log('유저아이디: ', userId.userId);
 
-  // useEffect(() => {
-  //   findFriendList();
-  // }, [userId]);
+      const response = await axios.get(`${apiURL}/users/myPage/${userId.userId}`);
+      console.log('강승우', response);
+      setUserNickName(response.data.userNickName);
+      console.log(response.data.userNickName);
+
+      setGender(response.data.gender);
+      console.log('성별', response.data.gender);
+    } catch (error) {
+      console.error('이름 받아오기:', error);
+    }
+  };
+
+  useEffect(() => {
+    userInfo();
+  }, [userId]);
 
   return (
     <Wrapper>
@@ -126,11 +141,12 @@ const Character = () => {
         <CharacterIcon />
         <PlanetSeatIcon />
         <LuckyBox>
-          <LuckIcon onClick={increaseLuck} />
+          <LuckIcon />
+          {/* onClick={increaseLuck}  */}
           <LuckScore>{luckScore}</LuckScore>
         </LuckyBox>
       </CharacterBox>
-      <HomeTitle>유라의 2023</HomeTitle>
+      <HomeTitle>{userNickName}의 2023</HomeTitle>
       <LetterSendingBtn onClick={modalSendingView}>친구에게 편지보내기</LetterSendingBtn>
       {isModalSendingOpend && <SendingModal modalClose={modalSendingView} />}
       <DelAccount onClick={modalView}>계정삭제</DelAccount>
@@ -183,7 +199,7 @@ const PlanetSeatIcon = styled(PlanetSeat)`
 const LuckyBox = styled.div`
   position: absolute;
   right: 100px;
-  top: 420px;
+  top: 380px;
 `;
 
 const LuckIcon = styled(Lucky)`
@@ -242,7 +258,7 @@ const CharacterIcon = styled(Girl)`
   width: 100px;
   height: 200px;
   right: 200px;
-  bottom: 340px;
+  top: 120px;
 `;
 
 const BackStar = styled(Star)`
