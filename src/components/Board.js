@@ -18,7 +18,6 @@ const Board = () => {
   const { userId } = decodedToken;
   const [rollingPaperDtos, setRollingPaperDtos] = useState([]);
 
-  const openModalHandler = () => {};
   const userInfo = async () => {
     try {
       console.log('유저아이디: ', userId);

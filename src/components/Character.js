@@ -90,20 +90,6 @@ const Character = () => {
     }
   };
 
-  // useEffect(() => {
-  //   axios.get(`${apiURL}/users/myPage/${userId}`);
-  //   console
-  //     .log()
-  //     .then(response => {
-  //       setUserNickName(response.userNickName);
-  //       console.log(response.userNickName);
-
-  //       setGender(response.gender);
-  //       console.log(response.gender);
-  //     })
-  //     .catch(error => console.error(error));
-  // }, []);
-
   const userInfo = async () => {
     try {
       console.log('유저아이디: ', userId);
@@ -122,7 +108,7 @@ const Character = () => {
 
   useEffect(() => {
     userInfo();
-  }, [userId]);
+  }, []);
 
   return (
     <Wrapper>

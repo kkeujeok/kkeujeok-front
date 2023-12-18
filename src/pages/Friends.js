@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
 import styled from 'styled-components';
 import { ReactComponent as Paper } from '../imgs/Paper.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 const Friends = () => {
+  const navigator = useNavigate();
   const [searchData, setSearchData] = useState([]);
   const [searchWord, setSearchWord] = useState(''); // 검색어 상태 추가
   // 친구 목록
@@ -86,6 +87,10 @@ const Friends = () => {
     }
   };
 
+  const visit = id => {
+    navigator(`/home/${id}`);
+  };
+
   return (
     <Wrapper>
       <LeftBox>
@@ -120,7 +125,7 @@ const Friends = () => {
               <List key={user.name}>
                 <p>{user.name}</p>
                 <BtnBox>
-                  <FriendBtn>방문</FriendBtn>
+                  <FriendBtn onClick={() => visit(user.id)}>방문</FriendBtn>
                   <FriendBtn onClick={deleteFriend}>삭제</FriendBtn>
                 </BtnBox>
               </List>

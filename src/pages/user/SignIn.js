@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -36,7 +37,10 @@ const SignIn = () => {
           localStorage.setItem('email', email);
           localStorage.setItem('token', token);
           console.log('토큰 저장 성공', token);
-          navigate('/home');
+
+          const decodedToken = jwtDecode(token);
+          const { userId } = decodedToken;
+          navigate(`/home/${userId}`);
         } else {
           alert('로그인 실패');
         }
