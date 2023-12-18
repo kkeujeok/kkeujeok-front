@@ -1,17 +1,38 @@
 /* eslint-disable no-console */
-import { useRef, Children, useEffect } from 'react';
+import { useRef, Children, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const SendingModal = ({ modalClose, children }) => {
   // 리스트 정보
 
   // 모달 백그라운드 구분
   const modalRef = useRef(null);
+  const [message, setMessage] = useState('');
 
-  const sendMessage = () => {
-    console.log('전송 ');
-    alert('전송');
-    modalClose(false);
+  const apiURL = process.env.REACT_APP_API_URL;
+
+  // 사용자 ID 추출
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+  const { userId } = decodedToken;
+
+  const sendMessage = async () => {
+    console.log('보낼 메시지', message);
+
+    if (message.trim() === '') {
+      alert('롤링페이퍼 입력 확인', '롤링페이퍼는 공백일 수 없습니다.');
+    } else {
+      await axios.post(`${apiURL}/rolling-papers/${userId}/2`, {
+        content: message,
+      });
+
+      console.log('전송 ');
+      alert('롤링페이퍼를 전달했습니다.');
+
+      modalClose(false);
+    }
   };
 
   useEffect(() => {
@@ -37,8 +58,13 @@ const SendingModal = ({ modalClose, children }) => {
           <Children />
         ) : (
           <>
-            <ModalInput />
-            <SendBtn onClick={sendMessage}>메시지 보내기</SendBtn>
+            <ModalInput
+              className="input"
+              type="text"
+              placeholder="보낼 메시지를 입력하세요."
+              onChange={e => setMessage(e.target.value)}
+            />
+            <SendBtn onClick={() => sendMessage()}>메시지 보내기</SendBtn>
           </>
         )}
       </ModalWrapper>

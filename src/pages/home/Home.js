@@ -14,7 +14,7 @@ const Home = () => {
     <HomeWrapper>
       <Board />
       <SatelliteIcon />
-      <p>현재 페이지 파라미터 {id} 입니다. </p>
+      {/* <p>현재 페이지 파라미터 {id} 입니다. </p> */}
       <Character />
     </HomeWrapper>
   );
