@@ -20,7 +20,7 @@ const RollingPaper = () => {
     <Wrapper onClick={modalView}>
       <Pin />
       <Paper>
-        <Message>ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇdddddㅇㅇㅇㅇㅇ</Message>
+        <Message>ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</Message>
         <Sender>보낸이 : 유라</Sender>
       </Paper>
       {isModalOpend && <Modal modalClose={modalView} />}

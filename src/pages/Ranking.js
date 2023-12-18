@@ -1,65 +1,66 @@
+/* eslint-disable no-console */
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as EmailImg } from '../imgs/Email.svg';
 import { ReactComponent as Satellite } from '../imgs/Satellite.svg';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
-const Ranking = () => (
-  <Wrapper>
-    <SatelliteIcon />
-    <LeftBox>
-      <BackBtn to="/home">내 우주로 돌아가기</BackBtn>
-      <PaperBox>
-        <ContentBox>
-          <Title> 행운 랭킹 TOP 10 </Title>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-          <List>
-            <p>이유라</p>
-            <p>99999점 </p>
-          </List>
-        </ContentBox>
-      </PaperBox>
-    </LeftBox>
-    <RightBox>
-      <MyRank>나의 랭킹: ㅇㅇㅇ등 </MyRank>
-      <EmailIcon />
-    </RightBox>
-  </Wrapper>
-);
+const Ranking = () => {
+  const [rankingData, setRankingData] = useState([]);
+  const [myRank, setMyRank] = useState(0);
+  const apiURL = process.env.REACT_APP_API_URL;
+
+  // 사용자 ID 추출
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+  const userId = decodedToken;
+
+  useEffect(() => {
+    axios
+      .get(`${apiURL}/users/ranking`)
+      .then(response => {
+        setRankingData(response.data);
+        console.log(response.data);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${apiURL}/users/ranking/${userId}`)
+      .then(response => {
+        setMyRank(response.data);
+        console.log(response.data);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  return (
+    <Wrapper>
+      <SatelliteIcon />
+      <LeftBox>
+        <BackBtn to="/home">내 우주로 돌아가기</BackBtn>
+        <PaperBox>
+          <ContentBox>
+            <Title> 행운 랭킹 TOP 10 </Title>
+            {rankingData.map((user, index) => (
+              <List key={user.nickname}>
+                <p>{user.nickname}</p>
+                <p>{user.luck}</p>
+              </List>
+            ))}
+          </ContentBox>
+        </PaperBox>
+      </LeftBox>
+      <RightBox>
+        <MyRank>{myRank}</MyRank>
+        <EmailIcon />
+      </RightBox>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   width: 100%;

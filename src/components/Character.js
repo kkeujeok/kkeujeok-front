@@ -8,16 +8,18 @@ import { ReactComponent as Space } from '../imgs/SpaceBackground.svg';
 import { ReactComponent as Girl } from '../imgs/Girl.svg';
 import { ReactComponent as Star } from '../imgs/StarY.svg';
 import Modal from './modal/ConfirmModal';
-import SendingModal from './modal/SendingModal';
 import axios from 'axios';
+import SendingModal from './modal/SendingModal';
 import { jwtDecode } from 'jwt-decode';
 
 const Character = () => {
   const apiURL = process.env.REACT_APP_API_URL;
+  const [luckScore, setLuckScore] = useState(-1);
 
   // 사용자 ID 추출
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
+  const userId = decodedToken;
 
   // 드롭다운 메뉴바
   const [dropdown, setDropdow] = useState(false);
@@ -28,11 +30,30 @@ const Character = () => {
   // 보내는 모달
   const [isModalSendingOpend, setIsModalSendingOpend] = useState(false);
 
+  // 여기 주의 에러뜨면 주석
+  useEffect(() => {
+    axios.get(`${apiURL}/users/${userId}/luck`).then(response => {
+      console.log(response.data);
+      setLuckScore(response.data);
+    });
+  }, []);
+
+  const increaseLuck = () => {
+    const newScore = luckScore + 1;
+    axios
+      .post(`${apiURL}/users/${userId}/increaseLuck`, { userId })
+      .then(response => {
+        console.log('점수 업데이트 성공:', response.data);
+        setLuckScore(newScore);
+      })
+      .catch(error => {
+        console.error('점수 업데이트 실패:', error);
+      });
+  };
+
   // 마이홈 정보 보기
   const [userNickName, setUserNickName] = useState('');
   const [gender, setGender] = useState('');
-
-  const { userId } = decodedToken;
 
   const modalView = () => {
     setIsModalOpend(prevState => !prevState);
@@ -69,19 +90,19 @@ const Character = () => {
     }
   };
 
-  useEffect(() => {
-    axios.get(`${apiURL}/users/myPage/${userId}`);
-    console
-      .log()
-      .then(response => {
-        setUserNickName(response.userNickName);
-        console.log(response.userNickName);
+  // useEffect(() => {
+  //   axios.get(`${apiURL}/users/myPage/${userId}`);
+  //   console
+  //     .log()
+  //     .then(response => {
+  //       setUserNickName(response.userNickName);
+  //       console.log(response.userNickName);
 
-        setGender(response.gender);
-        console.log(response.gender);
-      })
-      .catch(error => console.error(error));
-  }, []);
+  //       setGender(response.gender);
+  //       console.log(response.gender);
+  //     })
+  //     .catch(error => console.error(error));
+  // }, []);
 
   // const userInfo = ()
 
@@ -105,11 +126,11 @@ const Character = () => {
         <CharacterIcon />
         <PlanetSeatIcon />
         <LuckyBox>
-          <LuckIcon />
-          <LuckScore>777점</LuckScore>
+          <LuckIcon onClick={increaseLuck} />
+          <LuckScore>{luckScore}</LuckScore>
         </LuckyBox>
       </CharacterBox>
-      <HomeTitle>의 2023</HomeTitle>
+      <HomeTitle>유라의 2023</HomeTitle>
       <LetterSendingBtn onClick={modalSendingView}>친구에게 편지보내기</LetterSendingBtn>
       {isModalSendingOpend && <SendingModal modalClose={modalSendingView} />}
       <DelAccount onClick={modalView}>계정삭제</DelAccount>
@@ -162,7 +183,7 @@ const PlanetSeatIcon = styled(PlanetSeat)`
 const LuckyBox = styled.div`
   position: absolute;
   right: 100px;
-  top: 350px;
+  top: 420px;
 `;
 
 const LuckIcon = styled(Lucky)`
@@ -221,7 +242,7 @@ const CharacterIcon = styled(Girl)`
   width: 100px;
   height: 200px;
   right: 200px;
-  bottom: 400px;
+  bottom: 340px;
 `;
 
 const BackStar = styled(Star)`

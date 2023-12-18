@@ -248,12 +248,7 @@ const SearchBtn = styled.p`
 `;
 
 const ResultBox = styled.div`
-  width: 420px;
-  height: 400px;
-  margin-top: 10px;
-  margin-left: 20px;
-  padding-left: 30px;
-  overflow: auto;
+  width: 312px;
 `;
 const Title = styled.p`
   text-align: center;
