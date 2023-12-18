@@ -7,6 +7,8 @@ import { ReactComponent as PlanetSeat } from '../imgs/PlanetSeat.svg';
 import { ReactComponent as Lucky } from '../imgs/Lucky.svg';
 import { ReactComponent as Space } from '../imgs/SpaceBackground.svg';
 import { ReactComponent as Girl } from '../imgs/Girl.svg';
+import { ReactComponent as Lion } from '../imgs/Lion.svg';
+import { ReactComponent as Man } from '../imgs/Man.svg';
 import { ReactComponent as Star } from '../imgs/StarY.svg';
 import Modal from './modal/ConfirmModal';
 import axios from 'axios';
@@ -237,7 +239,7 @@ const Background = styled(Space)`
   height: auto;
 `;
 
-const CharacterIcon = styled(Girl)`
+const CharacterIcon = styled()`
   position: absolute;
   width: 100px;
   height: 200px;
