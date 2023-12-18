@@ -38,13 +38,9 @@ const Board = () => {
   return (
     <Wrapper>
       <PaperBox>
-        {/* 6개가 최대 */}
-        <RollingPaper />
-        <RollingPaper />
-        <RollingPaper />
-        <RollingPaper />
-        <RollingPaper />
-        <RollingPaper />
+        {rollingPaperDtos.map((paperDto, index) => (
+            <RollingPaper key={paperDto.id || index} {...paperDto} />
+        ))}
         <GroundBox />
       </PaperBox>
       <ConfirmRolling>받은 페이퍼 수: {rollingPaperDtos.length} 개</ConfirmRolling>
