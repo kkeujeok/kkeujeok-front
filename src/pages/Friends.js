@@ -3,68 +3,73 @@ import { ReactComponent as Paper } from '../imgs/Paper.svg';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 
 const Friends = () => {
-  const [searchData, setSearchData] = useState([]);
-  const [searchWord, setSearchWord] = useState(""); // 검색어 상태 추가
+    const [searchData, setSearchData] = useState([]);
+    const [searchWord, setSearchWord] = useState(""); // 검색어 상태 추가
 
-  // 친구 목록
-  const [friendList, setFriendList] = useState([]);
+    // 친구 목록
+    const [friendList, setFriendList] = useState([]);
 
-  const userId = 1;
-  const friendId = 2;
+    // 사용자 ID 추출
+    const token = localStorage.getItem('token');
+    const decodedToken = jwtDecode(token);
+    const userId = decodedToken;
+    const friendId = 2;
 
-  const apiURL = process.env.REACT_APP_API_URL;
+    const apiURL = process.env.REACT_APP_API_URL;
 
-  const search = () => {
-    axios.get(`${apiURL}/users/search/${searchWord}`)
-      .then((response) => {
-        setSearchData(response.data);
-        console.log(response.data);
-      })
-      .catch(error => console.error(error));
-  };
+    const search = () => {
+        //${apiURL}
+        axios.get(`${apiURL}/users/search/${searchWord}`)
+            .then((response) => {
+                setSearchData(response.data);
+                console.log(response.data);
+            })
+            .catch(error => console.error(error));
+    };
 
-  const handleInputChange = (event) => {
-    setSearchWord(event.target.value); // 입력 값으로 searchWord 상태 업데이트
-  };
+    const handleInputChange = (event) => {
+        setSearchWord(event.target.value); // 입력 값으로 searchWord 상태 업데이트
+    };
 
-  // // 친구 목록
-  // const findFriendList = () => {
-  //   axios.get(`/friends/${userId}`)
-  //     .then((response) => {
-  //       setFriendList(response.data.friends)
-  //       console.log(response.data.friends)
-  //     })
-  //     .catch(error => console.error(error));
-  // };
+    // // 친구 목록
+    // const findFriendList = () => {
+    //   axios.get(`/friends/${userId}`)
+    //     .then((response) => {
+    //       setFriendList(response.data.friends)
+    //       console.log(response.data.friends)
+    //     })
+    //     .catch(error => console.error(error));
+    // };
 
-  useEffect(() => {
-    axios.get(`${apiURL}/friends/${userId}`)
-      .then((response) => {
-         setFriendList(response.data.friends);
-         console.log(response.data.friends)
-        })
-      .catch(error => console.error(error));
-  }, []);
+    useEffect(() => {
+        axios.get(`${apiURL}/friends/${userId}`)
+            .then((response) => {
+                setFriendList(response.data.friends);
+                console.log(response.data.friends)
+            })
+            .catch(error => console.error(error));
+    }, []);
 
-  // 친구 신청
-  const addFriend = () => {
-    axios.post(`${apiURL}/friends/${user-id}/${friend-id}`)
-      .then((response) => {
-      })
-      .catch(error => console.error(error));
-  };
+    // 친구 신청
+    const addFriend = () => {
+        axios.post(`${apiURL}/friends/${user-id}/${friend-id}`)
+            .then((response) => {
+            })
+            .catch(error => console.error(error));
+    };
 
-  // 친구 삭제
-  const deleteFriend = () => {
-    axios.delete(`${apiURL}/friends/${user-id}/${friend-id}`)
-      .then((response) => {
-      })
-      .catch(error => console.error(error));
-  };
+    // 친구 삭제
+    const deleteFriend = () => {
+        axios.delete(`${apiURL}/friends/${user-id}/${friend-id}`)
+            .then((response) => {
+            })
+            .catch(error => console.error(error));
+    };
 
-  return (
+    return (
   <Wrapper>
     <LeftBox>
       <BackBtn to="/home">내 우주로 돌아가기</BackBtn>
@@ -72,21 +77,21 @@ const Friends = () => {
         <ContentBox>
           <Title>친구 검색</Title>
           <SearchBox>
-            <SearchInput 
-              placeholder="이메일을 검색하세요" 
+            <SearchInput
+              placeholder="이메일을 검색하세요"
               value={searchWord} // input의 value를 searchWord 상태와 연결
               onChange={handleInputChange} // 입력 시 handleInputChange 호출
             />
             <SearchBtn onClick={search}> 검색 </SearchBtn>
           </SearchBox>
-          <ResultBox>
-            {searchData.map((user, index) => (
-              <List key={user.email}>
-                <p>{user.nickname}</p>
-                <FriendBtn onClick={addFriend}>친구 신청</FriendBtn>
-              </List>
-            ))}
-          </ResultBox>
+            <ResultBox>
+                {searchData.map((user, index) => (
+                    <List key={user.email}>
+                        <p>{user.nickname}</p>
+                        <FriendBtn onClick={addFriend}>친구 신청</FriendBtn>
+                    </List>
+                ))}
+            </ResultBox>
         </ContentBox>
       </PaperBox>
     </LeftBox>
@@ -222,12 +227,7 @@ const SearchBtn = styled.p`
 `;
 
 const ResultBox = styled.div`
-  width: 420px;
-  height: 400px;
-  margin-top: 10px;
-  margin-left: 20px;
-  padding-left: 30px;
-  overflow: auto;
+  width: 312px;
 `;
 const Title = styled.p`
   text-align: center;
