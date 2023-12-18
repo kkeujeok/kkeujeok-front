@@ -15,7 +15,7 @@ const Ranking = () => {
   // 사용자 ID 추출
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
-  const userId = decodedToken;
+  const { userId } = decodedToken;
 
   useEffect(() => {
     axios
@@ -55,7 +55,7 @@ const Ranking = () => {
         </PaperBox>
       </LeftBox>
       <RightBox>
-        <MyRank>{myRank}</MyRank>
+          <MyRank>나의 랭킹: {myRank}등 </MyRank>
         <EmailIcon />
       </RightBox>
     </Wrapper>
