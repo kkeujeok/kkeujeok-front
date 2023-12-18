@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { ReactComponent as Paper } from '../imgs/Paper.svg';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 
 const Friends = () => {
     const [searchData, setSearchData] = useState([]);
@@ -12,12 +12,16 @@ const Friends = () => {
     // 친구 목록
     const [friendList, setFriendList] = useState([]);
 
-    const userId = 1;
+    // 사용자 ID 추출
+    const token = localStorage.getItem('token');
+    const decodedToken = jwtDecode(token);
+    const userId = decodedToken;
     const friendId = 2;
 
     const apiURL = process.env.REACT_APP_API_URL;
 
     const search = () => {
+        //${apiURL}
         axios.get(`${apiURL}/users/search/${searchWord}`)
             .then((response) => {
                 setSearchData(response.data);

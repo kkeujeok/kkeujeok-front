@@ -4,12 +4,17 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as EmailImg } from '../imgs/Email.svg';
 import { ReactComponent as Satellite } from '../imgs/Satellite.svg';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const Ranking = () => {
   const [rankingData, setRankingData] = useState([]);
   const [myRank, setMyRank] = useState(0);
-  const userId = 8;
   const apiURL = process.env.REACT_APP_API_URL;
+
+  // 사용자 ID 추출
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+  const userId = decodedToken;
 
   useEffect(() => {
     axios.get(`${apiURL}/users/ranking`)

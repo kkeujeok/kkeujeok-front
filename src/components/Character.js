@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import Dropdown from './DropDown';
 import { ReactComponent as PlanetSeat } from '../imgs/PlanetSeat.svg';
 import { ReactComponent as Lucky } from '../imgs/Lucky.svg';
@@ -14,11 +14,11 @@ import { jwtDecode } from 'jwt-decode';
 const Character = () => {
     const apiURL = process.env.REACT_APP_API_URL;
     const [luckScore, setLuckScore] = useState(-1);
-    const userId = 8;
 
     // 사용자 ID 추출
     const token = localStorage.getItem('token');
     const decodedToken = jwtDecode(token);
+    const userId = decodedToken;
 
     // 드롭다운 메뉴바
     const [dropdown, setDropdow] = useState(false);
@@ -29,6 +29,7 @@ const Character = () => {
     // 보내는 모달
     const [isModalSendingOpend, setIsModalSendingOpend] = useState(false);
 
+    //
     useEffect(() => {
         axios.get(`${apiURL}/users/${userId}/luck`)
             .then(response => {
@@ -39,7 +40,7 @@ const Character = () => {
 
     const increaseLuck = () => {
         const newScore = luckScore + 1;
-        axios.post(`/users/${userId}/increaseLuck`, { userId })
+        axios.post(`${apiURL}/users/${userId}/increaseLuck`, { userId })
             .then(response => {
                 console.log('점수 업데이트 성공:', response.data);
                 setLuckScore(newScore);
@@ -185,6 +186,22 @@ const HomeTitle = styled.p`
   font-style: normal;
   font-weight: 600;
   margin: 50px auto 0 auto;
+`;
+
+const LetterSendingBtn = styled.button`
+  width: 170px;
+  height: 60px;
+  background-color: rgba(114, 77, 188, 1);
+  text-align: center;
+  padding: 20px;
+  color: #ffff;
+  border-radius: 10px;
+  margin: 50px auto 0 auto;
+  border: none;
+  z-index: 500;
+  &:hover {
+    background-color: rgba(114, 100, 188, 1);
+  }
 `;
 
 const DelAccount = styled.p`
