@@ -38,11 +38,8 @@ const DetailModal = ({ modalClose, children }) => {
           <Children />
         ) : (
           <>
-            <Description>
-              안녕나는뽀야미야까꿍우르르까꿍안녕나는뽀야미야까꿍우르르까꿍안녕나는뽀야미야까꿍우르르까꿍안녕나는뽀야미야까꿍우르르까꿍
-              안녕나는뽀야미야까꿍우르르까꿍까ㅇ꿍ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
-            </Description>
-            <Sender>보낸이 : 이유라</Sender>
+            <Description>안녕! 나는 승우야! 2024 행복하게 살아!!</Description>
+            <Sender>보낸 이: 유라</Sender>
           </>
         )}
       </ModalWrapper>

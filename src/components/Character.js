@@ -43,14 +43,14 @@ const Character = () => {
   const increaseLuck = () => {
     const newScore = luckScore + 1;
     axios
-        .post(`${apiURL}/users/${userId}/increaseLuck`, { userId })
-        .then(response => {
-          console.log('점수 업데이트 성공:', response.data);
-          setLuckScore(newScore);
-        })
-        .catch(error => {
-          console.error('점수 업데이트 실패:', error);
-        });
+      .post(`${apiURL}/users/${userId}/increaseLuck`, { userId })
+      .then(response => {
+        console.log('점수 업데이트 성공:', response.data);
+        setLuckScore(newScore);
+      })
+      .catch(error => {
+        console.error('점수 업데이트 실패:', error);
+      });
   };
 
   // 마이홈 정보 보기
@@ -112,51 +112,51 @@ const Character = () => {
     userInfo();
   }, []);
 
-  let CharacterIconComponent;
-  switch (gender) {
-    case 'MALE':
-      CharacterIconComponent = Man;
-      break;
-    case 'FEMALE':
-      CharacterIconComponent = Girl;
-      break;
-    default:
-      CharacterIconComponent = Lion;
-  }
+  // let CharacterIconComponent;
+  // switch (gender) {
+  //   case 'MALE':
+  //     CharacterIconComponent = Man;
+  //     break;
+  //   case 'FEMALE':
+  //     CharacterIconComponent = Girl;
+  //     break;
+  //   default:
+  //     CharacterIconComponent = Lion;
+  // }
 
   return (
-      <Wrapper>
-        <MenuBtn
-            onMouseEnter={() => {
-              setDropdow(!dropdown);
-            }}
-        >
-          메뉴
-          {dropdown && <Dropdown />}
-        </MenuBtn>
-        <Background />
-        <BackStar />
-        <CharacterBox>
-          <CharacterIconComponent />
-          <PlanetSeatIcon />
-          <LuckyBox>
-            <LuckIcon onClick={increaseLuck} />
-            <LuckScore>{luckScore}</LuckScore>
-          </LuckyBox>
-        </CharacterBox>
-        <HomeTitle>{userNickName}의 2023</HomeTitle>
-        <LetterSendingBtn onClick={modalSendingView}>친구에게 편지보내기</LetterSendingBtn>
-        {isModalSendingOpend && <SendingModal modalClose={modalSendingView} />}
-        <DelAccount onClick={modalView}>계정삭제</DelAccount>
-        {isModalOpend && (
-            <Modal
-                modalClose={modalView}
-                title="계정 삭제 "
-                onYesHandler={() => deleteAccount()}
-                dialog="정말 삭제하시겠습니까?  한 번 삭제한 계정은 복구할 수 없습니다."
-            />
-        )}
-      </Wrapper>
+    <Wrapper>
+      <MenuBtn
+        onMouseEnter={() => {
+          setDropdow(!dropdown);
+        }}
+      >
+        메뉴
+        {dropdown && <Dropdown />}
+      </MenuBtn>
+      <Background />
+      <BackStar />
+      <CharacterBox>
+        <CharacterIcon />
+        <PlanetSeatIcon />
+        <LuckyBox>
+          <LuckIcon onClick={increaseLuck} />
+          <LuckScore>{luckScore}</LuckScore>
+        </LuckyBox>
+      </CharacterBox>
+      <HomeTitle>{userNickName}의 2023</HomeTitle>
+      <LetterSendingBtn onClick={modalSendingView}>친구에게 편지보내기</LetterSendingBtn>
+      {isModalSendingOpend && <SendingModal modalClose={modalSendingView} />}
+      <DelAccount onClick={modalView}>계정삭제</DelAccount>
+      {isModalOpend && (
+        <Modal
+          modalClose={modalView}
+          title="계정 삭제 "
+          onYesHandler={() => deleteAccount()}
+          dialog="정말 삭제하시겠습니까?  한 번 삭제한 계정은 복구할 수 없습니다."
+        />
+      )}
+    </Wrapper>
   );
 };
 
@@ -164,13 +164,13 @@ const Wrapper = styled.div`
   width: 35%;
   height: 100vh;
   background: linear-gradient(
-      180deg,
-      #0c0d41 0%,
-      #221c5f 31.16%,
-      #352f85 57.51%,
-      #40399e 70.05%,
-      rgba(124, 79, 197, 0.76) 81.56%,
-      rgba(216, 116, 146, 0) 100%
+    180deg,
+    #0c0d41 0%,
+    #221c5f 31.16%,
+    #352f85 57.51%,
+    #40399e 70.05%,
+    rgba(124, 79, 197, 0.76) 81.56%,
+    rgba(216, 116, 146, 0) 100%
   );
 
   display: flex;

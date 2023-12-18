@@ -71,7 +71,7 @@ const Friends = () => {
       await axios.post(`${apiURL}/friends/${userId}/${friendId}`);
       // setFriendList(response.data.friends);
       // console.log('친구신청겨로가:', response);
-      alert('response.data.message');
+      alert('친구 신청을 완료했습니다.');
     } catch (error) {
       console.error('친구 신청 에러:', error);
     }
