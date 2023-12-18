@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Dropdown from './DropDown';
 import { ReactComponent as PlanetSeat } from '../imgs/PlanetSeat.svg';
 import { ReactComponent as Lucky } from '../imgs/Lucky.svg';
@@ -8,13 +8,26 @@ import { ReactComponent as Girl } from '../imgs/Girl.svg';
 import { ReactComponent as Star } from '../imgs/StarY.svg';
 import Modal from './modal/ConfirmModal';
 import axios from 'axios';
+import SendingModal from './modal/SendingModal';
+import { jwtDecode } from 'jwt-decode';
 
 const Character = () => {
-    const [luckScore, setLuckScore] = useState(-1);
-    const [dropdown, setDropdown] = useState(false);
-    const [isModalOpened, setIsModalOpened] = useState(false);
-    const userId = 8;
     const apiURL = process.env.REACT_APP_API_URL;
+    const [luckScore, setLuckScore] = useState(-1);
+    const userId = 8;
+
+    // 사용자 ID 추출
+    const token = localStorage.getItem('token');
+    const decodedToken = jwtDecode(token);
+
+    // 드롭다운 메뉴바
+    const [dropdown, setDropdow] = useState(false);
+
+    // 계정삭제 모달
+    const [isModalOpend, setIsModalOpend] = useState(false);
+
+    // 보내는 모달
+    const [isModalSendingOpend, setIsModalSendingOpend] = useState(false);
 
     useEffect(() => {
         axios.get(`${apiURL}/users/${userId}/luck`)
@@ -36,38 +49,76 @@ const Character = () => {
             });
     };
 
-    const modalView = () => {
-        setIsModalOpened(!isModalOpened);
-        document.body.style.overflow = isModalOpened ? 'unset' : 'hidden';
+  const modalView = () => {
+    setIsModalOpend(prevState => !prevState);
+    if (!isModalOpend) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  };
+
+    const modalSendingView = () => {
+        setIsModalSendingOpend(prevState => !prevState);
+        if (!isModalSendingOpend) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        console.log('모달 작동! ');
     };
 
-    return (
-        <Wrapper>
-            <MenuBtn onMouseEnter={() => setDropdown(!dropdown)}>
-                메뉴
-                {dropdown && <Dropdown />}
-            </MenuBtn>
-            <Background />
-            <BackStar />
-            <CharacterBox>
-                <CharacterIcon />
-                <PlanetSeatIcon />
-                <LuckyBox>
-                    <LuckIcon onClick={increaseLuck} />
-                    <LuckScore>{luckScore}점</LuckScore>
-                </LuckyBox>
-            </CharacterBox>
-            <HomeTitle>유라의 2023</HomeTitle>
-            <DelAccount onClick={modalView}>계정삭제</DelAccount>
-            {isModalOpened && (
-                <Modal
-                    modalClose={modalView}
-                    title="계정 삭제"
-                    dialog="정말 삭제하시겠습니까? 한 번 삭제한 계정은 복구할 수 없습니다."
-                />
-            )}
-        </Wrapper>
-    );
+    const deleteAccount = async () => {
+        try {
+            const { userId } = decodedToken;
+            console.log('유저아이디: ', userId);
+
+            // 계정 삭제 요청
+            await axios.delete(`${apiURL}/users/delete/${userId}`);
+
+            // 로컬 스토리지에서 토큰 제거
+            localStorage.removeItem('token');
+
+            // 부모 컴포넌트에 계정 삭제 이벤트 전달
+        } catch (error) {
+            console.error('계정 삭제 중 에러:', error);
+        }
+    };
+
+  return (
+    <Wrapper>
+        <MenuBtn
+            onMouseEnter={() => {
+                setDropdow(!dropdown);
+            }}
+        >
+        메뉴
+        {dropdown && <Dropdown />}
+      </MenuBtn>
+      <Background />
+      <BackStar />
+        <CharacterBox>
+            <CharacterIcon />
+            <PlanetSeatIcon />
+            <LuckyBox>
+                <LuckIcon onClick={increaseLuck} />
+                <LuckScore>{luckScore}점</LuckScore>
+            </LuckyBox>
+        </CharacterBox>
+        <HomeTitle>유라의 2023</HomeTitle>
+        <LetterSendingBtn onClick={modalSendingView}>친구에게 편지보내기</LetterSendingBtn>
+        {isModalSendingOpend && <SendingModal modalClose={modalSendingView} />}
+        <DelAccount onClick={modalView}>계정삭제</DelAccount>
+        {isModalOpend && (
+            <Modal
+                modalClose={modalView}
+                title="계정 삭제 "
+                onYesHandler={() => deleteAccount()}
+                dialog="정말 삭제하시겠습니까?  한 번 삭제한 계정은 복구할 수 없습니다."
+            />
+        )}
+    </Wrapper>
+  );
 };
 
 const Wrapper = styled.div`

@@ -1,36 +1,102 @@
+/* eslint-disable no-console */
+/* eslint-disable no-alert */
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const SignIn = () => (
-  <SignInWrapper>
-    <Title>끄적끄적</Title>
-    <Form>
-      <InputBox>
-        <Label>아이디</Label>
-        <InputStyleBox yes>
-          <Input className="input" type="text" placeholder="아이디를 입력하세요" />
-          <InputLine />
-        </InputStyleBox>
-      </InputBox>
-      <InputBox>
-        <Label>비밀번호</Label>
-        <InputStyleBox>
-          <Input className="input" type="password" placeholder="비밀번호를 입력하세요" />
-          <InputLine />
-        </InputStyleBox>
-      </InputBox>
-    </Form>
-    <LoginBtn to="/home">로그인</LoginBtn>
-    <BtnBox>
-      <BtnUser to="/signUp" title="회원가입">
-        회원가입 /
-      </BtnUser>
-      <BtnUser to="/findPw" pw>
-        비밀번호 찾기
-      </BtnUser>
-    </BtnBox>
-  </SignInWrapper>
-);
+const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+
+  const apiURL = process.env.REACT_APP_API_URL;
+
+  const navigate = useNavigate();
+
+  async function login() {
+    console.log('ddd:', email, pw);
+
+    if (email.trim() === '') {
+      alert('아이디 입력 확인', '아이디가 입력되지 않았습니다.');
+    } else if (pw.trim() === '') {
+      alert('비밀번호 입력 확인', '비밀번호가 입력되지 않았습니다.');
+    } else {
+      try {
+        const res = await axios.post(`${apiURL}/users/login`, {
+          email,
+          pw,
+        });
+
+        console.log('답장 확인', res);
+        if (res.data !== null && res.data !== '') {
+          console.log('로그인 성공');
+
+          // 로그인 성공 후 토큰 저장
+          const token = res.data;
+          localStorage.setItem('token', token);
+          console.log('토큰 저장 성공', token);
+          navigate('/home');
+        } else {
+          alert('로그인 실패');
+        }
+      } catch (error) {
+        console.log('토큰 저장 실패', error);
+        alert('존재하지 않는 회원입니다.');
+      }
+    }
+  }
+
+  useEffect(() => {
+    console.log(email, pw);
+  });
+
+  return (
+    <SignInWrapper>
+      <Title>끄적끄적</Title>
+      <Form>
+        <InputBox>
+          <Label>아이디</Label>
+          <InputStyleBox yes>
+            <Input
+              className="input"
+              type="text"
+              placeholder="아이디를 입력하세요"
+              onChange={e => setEmail(e.target.value)}
+            />
+            <InputLine />
+          </InputStyleBox>
+        </InputBox>
+        <InputBox>
+          <Label>비밀번호</Label>
+          <InputStyleBox>
+            <Input
+              className="input"
+              type="password"
+              placeholder="비밀번호를 입력하세요"
+              onChange={e => setPw(e.target.value)}
+            />
+            <InputLine />
+          </InputStyleBox>
+        </InputBox>
+      </Form>
+      <LoginBtn
+        onClick={() => {
+          login();
+        }}
+      >
+        로그인
+      </LoginBtn>
+      <BtnBox>
+        <BtnUser to="/signUp" title="회원가입">
+          회원가입 /
+        </BtnUser>
+        <BtnUser to="/findPw" pw>
+          비밀번호 찾기
+        </BtnUser>
+      </BtnBox>
+    </SignInWrapper>
+  );
+};
 
 const SignInWrapper = styled.div`
   width: 50%;

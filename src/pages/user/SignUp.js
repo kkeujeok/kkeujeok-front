@@ -1,64 +1,215 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Cover from '../../components/Cover';
+import axios from 'axios';
 
 const SignUp = () => {
+  // 성별 구분
   const [checkedSexValues, setCheckedSexValues] = useState([]);
+
+  // 회원가입 정보 저장할 상태 변수
+  const [email, setEmail] = useState('');
+  const [pw, setPW] = useState('');
+  const [checkPW, setCheckPW] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [existence, setExistence] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [gender, setGender] = useState('FEMAIL');
+  const [agreementChecked, setAgreementChecked] = useState(false);
+
+  // 중복 확인 상태(state)
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
+  // 네비게이션
+  const navigate = useNavigate();
+
+  // 이메일 정규식
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // 이메일 유효성 검사 함수
+
+  // eslint-disable-next-line no-shadow
+  const validateEmail = email => emailRegex.test(email);
+
+  // 회원가입 상태
+  const [disabled, setDisabled] = useState(true);
+
+  const apiURL = process.env.REACT_APP_API_URL;
+
+  const ok = '사용 가능한 닉네임입니다.';
+  const no = '이미 존재하는 닉네임입니다.';
+
   const checkSex = value => {
     if (checkedSexValues.includes(value)) {
-      setCheckedSexValues(checkedSexValues.filter(v => v !== value));
+      setCheckedSexValues([]);
+      setGender('');
     } else {
       setCheckedSexValues([value]);
+      setGender(value);
     }
   };
+
+  // 이메일 중복 체크
+  async function checkEmail() {
+    console.log('이메일 확인 : ', email);
+
+    if (!validateEmail(email)) {
+      alert('이메일 형식이 올바르지 않습니다.');
+      return;
+    }
+
+    const res = await axios.post(`${apiURL}/users/check-email`, {
+      email,
+    });
+
+    console.log('답장 확인', res);
+
+    if (res.data === true) {
+      setIsEmailChecked(true);
+      alert('사용 가능한 이메일입니다.');
+    } else {
+      setIsEmailChecked(false);
+      alert('이미 존재하는 이메일입니다.');
+    }
+  }
+
+  // 닉네임 중복 체크
+  async function checkNickname() {
+    const res = await axios.post(`${apiURL}/users/check-nickname`, {
+      nickname,
+    });
+    console.log('답장 확인', res);
+
+    if (res.data === true) {
+      setExistence(ok);
+      setIsNicknameChecked(true);
+    } else {
+      setExistence(no);
+      setIsNicknameChecked(false);
+    }
+    alert(existence);
+  }
+
+  // 회원가입
+  async function signup() {
+    // 중복 확인 X
+    if (!isEmailChecked || !isNicknameChecked) {
+      alert('이메일과 닉네임 중복 확인을 해주세요.');
+      return;
+    }
+
+    const res = await axios.post(`${apiURL}/users/join`, {
+      email,
+      pw,
+      gender,
+      nickname,
+    });
+    console.log('signup: ', res);
+    if (res.status === 201) {
+      alert('회원가입이 완료되었습니다.');
+      navigate('/');
+    } else {
+      // 실패 시
+      alert('회원가입에 실패했습니다. 잘못된 값을 수정해주세요.');
+    }
+  }
+
+  const AgreementChange = () => {
+    setAgreementChecked(!agreementChecked);
+  };
+
+  const Submit = e => {
+    e.preventDefault();
+
+    // 체크박스가 체크되지 않으면
+    if (!agreementChecked) {
+      alert('약관에 동의해야 회원가입이 가능합니다.');
+      return;
+    }
+
+    // 나머지 로직 수행
+    signup();
+  };
+
   // useEffect(() => {
-  //   // 수정된 값 확인
-  //   // eslint-disable-next-line no-console
-  //   console.log('dddd:', checkedSexValues);
-  // }, [checkedSexValues]);
+  //   console.log(email, nickname, pw, gender);
+  // });
+
+  // 비밀번호 일치하는지
+  useEffect(() => {
+    const errMsg = pw !== checkPW ? '비밀번호가 일치하지 않습니다.' : '';
+    setErrorMessage(errMsg);
+  }, [pw, checkPW]);
+
+  useEffect(() => {
+    if (nickname !== '') alert(existence);
+  }, [existence]);
+
+  // 데이터 값 없거나 에러
+  useEffect(() => {
+    setDisabled(!(email && pw && checkPW && nickname && !errorMessage));
+  }, [email, pw, checkPW, nickname, errorMessage]);
+
   return (
     <Wrapper>
       <Cover />
       <SignUpWrapper>
         <Title>회원가입</Title>
-        <Form>
+        <Form onSubmit={Submit}>
           <InputBox>
             <Label>아이디(이메일)</Label>
             <InputStyleBox yes="80px">
-              <Input className="input" type="text" placeholder="이메일을 입력하세요" />
+              <Input
+                className="input"
+                type="text"
+                placeholder="이메일을 입력하세요"
+                onChange={e => setEmail(e.target.value)}
+              />
               <InputLine />
             </InputStyleBox>
-            <SmallBtn>전송</SmallBtn>
-          </InputBox>
-          <InputBox>
-            <Label>이메일 인증 코드</Label>
-            <InputStyleBox>
-              <Input className="input" type="text" placeholder="인증코드를 입력하세요" />
-              <InputLine />
-            </InputStyleBox>
-            <SmallBtn>인증</SmallBtn>
+            <SmallBtn onClick={() => checkEmail(email)}>중복확인</SmallBtn>
           </InputBox>
           <InputBox>
             <Label>비밀번호</Label>
             <InputStyleBox yes="112px">
-              <Input className="input" type="text" placeholder="비밀번호를 입력하세요" />
+              <Input
+                className="input"
+                type="password"
+                placeholder="비밀번호를 입력하세요"
+                onChange={e => setPW(e.target.value)}
+              />
               <InputLine />
             </InputStyleBox>
           </InputBox>
           <InputBox>
             <Label>비밀번호 확인</Label>
             <InputStyleBox yes="85px">
-              <Input className="input" type="text" placeholder="비밀번호를 다시 입력하세요 " />
+              <Input
+                className="input"
+                type="password"
+                placeholder="비밀번호를 다시 입력하세요 "
+                onChange={e => setCheckPW(e.target.value)}
+              />
               <InputLine />
+              {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
             </InputStyleBox>
           </InputBox>
           <InputBox>
             <Label>닉네임</Label>
             <InputStyleBox yes="122px">
-              <Input className="input" type="text" placeholder="이메일을 입력하세요" />
+              <Input
+                className="input"
+                type="text"
+                placeholder="닉네임을 입력하세요"
+                onChange={e => setNickname(e.target.value)}
+              />
               <InputLine />
             </InputStyleBox>
-            <SmallBtn>중복 확인</SmallBtn>
+            <SmallBtn onClick={() => checkNickname()}>중복 확인</SmallBtn>
           </InputBox>
           <InputBox>
             <Label>성별</Label>
@@ -68,9 +219,9 @@ const SignUp = () => {
                   className="input"
                   type="checkbox"
                   name="sex"
-                  value="1"
-                  checked={checkedSexValues.includes('1')}
-                  onChange={() => checkSex('1')}
+                  value="FEMALE"
+                  checked={checkedSexValues.includes('FEMALE')}
+                  onChange={() => checkSex('FEMALE')}
                 />
                 여성
               </CheckBoxLabel>
@@ -81,9 +232,9 @@ const SignUp = () => {
                   className="input"
                   type="checkbox"
                   name="sex"
-                  value="2"
-                  checked={checkedSexValues.includes('2')}
-                  onChange={() => checkSex('2')}
+                  value="MALE"
+                  checked={checkedSexValues.includes('MALE')}
+                  onChange={() => checkSex('MALE')}
                 />
                 남성
               </CheckBoxLabel>
@@ -94,20 +245,32 @@ const SignUp = () => {
                   className="input"
                   type="checkbox"
                   name="sex"
-                  value="3"
-                  checked={checkedSexValues.includes('3')}
-                  onChange={() => checkSex('3')}
+                  value="SECRECT"
+                  checked={checkedSexValues.includes('SECRECT')}
+                  onChange={() => checkSex('SECRECT')}
                 />
                 비밀
               </CheckBoxLabel>
             </InputStyleBox>
           </InputBox>
           <AgreementLabel>
-            <CheckInput className="input" type="checkbox" />
+            <CheckInput
+              className="input"
+              type="checkbox"
+              checked={agreementChecked}
+              onChange={AgreementChange}
+            />
             <p>(필수) 본인은 만 14세 이상이며 개인 정보 수집에 동의합니다.</p>
           </AgreementLabel>
         </Form>
-        <ConfirmBtn>확인</ConfirmBtn>
+        <ConfirmBtn
+          onClick={() => {
+            signup();
+          }}
+          type="submit"
+        >
+          확인
+        </ConfirmBtn>
       </SignUpWrapper>
     </Wrapper>
   );
@@ -254,6 +417,10 @@ const AgreementLabel = styled.p`
   align-items: center;
   margin-left: 125px;
   margin-top: -20px;
+`;
+
+const ErrorText = styled.p`
+  color: #ff5757;
 `;
 
 export default SignUp;
