@@ -38,7 +38,7 @@ const Board = () => {
     <Wrapper>
       <PaperBox>
         {rollingPaperDtos.map((paperDto, index) => (
-            <RollingPaper key={paperDto.id || index} {...paperDto} />
+          <RollingPaper key={paperDto.id || index} {...paperDto} />
         ))}
         <GroundBox />
       </PaperBox>
