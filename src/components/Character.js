@@ -33,6 +33,18 @@ const Character = () => {
   // 보내는 모달
   const [isModalSendingOpend, setIsModalSendingOpend] = useState(false);
 
+  // let CharacterIconComponent;
+  // switch (gender) {
+  //   case '남성':
+  //     CharacterIconComponent = Man;
+  //     break;
+  //   case '여성':
+  //     CharacterIconComponent = Girl;
+  //     break;
+  //   default:
+  //     CharacterIconComponent = Lion;
+  // }
+
   useEffect(() => {
     axios.get(`${apiURL}/users/${userId}/luck`).then(response => {
       console.log(response.data);
@@ -239,7 +251,7 @@ const Background = styled(Space)`
   height: auto;
 `;
 
-const CharacterIcon = styled()`
+const CharacterIcon = styled(Girl)`
   position: absolute;
   width: 100px;
   height: 200px;
