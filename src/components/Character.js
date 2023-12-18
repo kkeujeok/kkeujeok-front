@@ -20,7 +20,7 @@ const Character = () => {
   // 사용자 ID 추출
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
-  const userId = decodedToken;
+  const { userId } = decodedToken;
 
   // 드롭다운 메뉴바
   const [dropdown, setDropdow] = useState(false);
