@@ -66,8 +66,7 @@ const Friends = () => {
       console.log('유저아이디: ', userId);
 
       const response = await axios.post(`${apiURL}/friends/${userId}/${friendId}`);
-      setFriendList(response.data.friends);
-      console.log(response.data.friends);
+
       alert('친구 신청이 완료되었습니다');
     } catch (error) {
       console.error('친구 신청 에러:', error);
@@ -80,8 +79,7 @@ const Friends = () => {
       console.log('유저아이디: ', userId);
 
       const response = await axios.delete(`${apiURL}/friends/${userId}/${friendId}`);
-      setFriendList(response.data.friends);
-      console.log(response.data.friends);
+
       alert('친구가 삭제되었습니다');
     } catch (error) {
       console.error('친구 신청 에러:', error);
@@ -107,8 +105,7 @@ const Friends = () => {
               {searchData.map((user, index) => (
                 <List key={user.email}>
                   <p>{user.nickname}</p>
-                  <FriendBtn>친구 신청</FriendBtn>
-                  {/* // onClick={addFriend} */}
+                  <FriendBtn onClick={addFriend}>친구 신청</FriendBtn>
                 </List>
               ))}
             </ResultBox>
