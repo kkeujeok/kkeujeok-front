@@ -1,6 +1,5 @@
-<img width="733" alt="image" src="https://github.com/kkeujeok/kkeujeok-front/assets/81766889/5a370db1-5656-46ce-83bf-eda01260f385"># ✏️ 끄적끄적-Front
 
-명지대학교 '웹 프로그래밍2' 수업 3조 "끄적끄적" 팀 프로젝트
+# 명지대학교 '웹 프로그래밍2' 수업 3조 "끄적끄적" 팀 프로젝트
 <img width="550" alt="스크린샷 2023-12-19 오후 7 57 10" src="https://github.com/kkeujeok/kkeujeok-front/assets/81766889/bd78de79-c5e2-4834-9cd2-e2b7d2b70533">
 
 
